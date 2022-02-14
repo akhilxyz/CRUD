@@ -59,7 +59,7 @@ function MyMenu() {
             <Nav className="me-auto">
             </Nav>
             <Nav>
-              <p style={{ color: "white" }}>{userDetails.email}</p>
+              <p style={{ color: "white" }}>{userDetails?.email}</p>
               {
                 auth ?
                   <Button onClick={() => { localStorage.removeItem("loggedIn"); history('/login') }}>Logout</Button>
