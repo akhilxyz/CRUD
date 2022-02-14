@@ -23,12 +23,12 @@ export default function SignUp() {
     user.id = userList.length + 1;
     let newUser = [...userList, user];
     setUserList(newUser);
-    localStorage.setItem("userList", JSON.stringify(newUser));
+    localStorage.setItem('userListData', JSON.stringify(newUser));
   };
 
   const GetData = () => {
-    if (localStorage.getItem("userList")) {
-      let userListt = JSON.parse(localStorage.getItem("userList"));
+    if (localStorage.getItem('userListData')) {
+      let userListt = JSON.parse(localStorage.getItem('userListData'));
       setUserList(userListt);
     }
   };
@@ -38,9 +38,15 @@ export default function SignUp() {
   }, []);
 
   const register = () => {
-    Adduser(userState);
-    window.alert('Resgisted Successfully !')
-    history('/')
+    const userDetail = userList.find(user => user.email === userState.email)
+    if (userDetail) {
+      return window.alert('User Already Exist')
+    }
+    else {
+      Adduser(userState);
+      window.alert('Resgisted Successfully !')
+      history('/')
+    }
   };
 
   return (

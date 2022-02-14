@@ -19,16 +19,9 @@ export default function Login() {
     });
   };
 
-  const Adduser = (user) => {
-    user.id = userList.length + 1;
-    let newUser = [...userList, user];
-    setUserList(newUser);
-    localStorage.setItem("userList", JSON.stringify(newUser));
-  };
-
   const GetData = () => {
-    if (localStorage.getItem("userList")) {
-      let userListt = JSON.parse(localStorage.getItem("userList"));
+    if (localStorage.getItem("userListData")) {
+      let userListt = JSON.parse(localStorage.getItem("userListData"));
       setUserList(userListt);
     }
   };
@@ -39,17 +32,19 @@ export default function Login() {
 
   const login = () => {
     const userDetail = userList.find(user => user.email === userState.email)
-    if(userDetail){
-      if(userDetail.password === userState.password){
+    if (userDetail) {
+      if (userDetail.password === userState.password) {
         window.alert('Login Successfully !')
-        localStorage.setItem("loggedIn", true)
+        let log = userState
+        log.isLogedin = true
+        localStorage.setItem("loggedIn", JSON.stringify(userState))
         history('/')
       }
-      else{
+      else {
         window.alert('Wrong Password')
       }
     }
-    else{
+    else {
       window.alert('User Not Exist')
     }
   };

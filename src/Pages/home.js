@@ -1,68 +1,56 @@
-import AddForm from '../Component/AddForm';
-import Curd from '../Component/Crud';
-import { useEffect, useState } from 'react';
-import EditForm from '../Component/EditForm';
 
-export default function Home() {
+import { useEffect, useState } from "react";
+import DataTable from "../Component/DataTable";
+import Header from "../Component/Header";
+
+function App() {
   const [userList, setUserList] = useState([]);
+  const userDetails = JSON.parse(localStorage.getItem("loggedIn"))
 
-  const [isEdit, setisEdit] = useState()
-  const[userDetails, setuserDetails] = useState('')
-
+  // userlist -localstotrage.get
+  // setuser-localset
+  const Delete = () => {
+    setUserList([]);
+  };
+  //adding user...
   const Adduser = (user) => {
-    setisEdit(false)
     user.id = userList.length + 1;
-    let newUser = [...userList, user]
-    setUserList(newUser);
-    localStorage.setItem("userList", JSON.stringify(newUser));
+    let data = [...userList, user]
+    setUserList(data);
+    localStorage.setItem(userDetails.email, JSON.stringify(data));
   };
 
-  const GetData = () => {
-    if (localStorage.getItem("userList")) {
-      let userListt = JSON.parse(localStorage.getItem("userList"));
-      setUserList(userListt);
-    }
-  };
-  
   useEffect(() => {
-    GetData();
+    if (localStorage.getItem(userDetails.email)) {
+          let userListt = JSON.parse(localStorage.getItem(userDetails.email));
+          setUserList(userListt);
+        }
   }, []);
   
-  
+  //edit user....
   const EditUser = (user) => {
-    const update = userList.map((iteam) => (user.id === iteam.id ? user : iteam))
-    localStorage.setItem("userList", JSON.stringify(update));
-    setUserList(update);
-    setisEdit(false)
+    let data = userList.map((iteam) => (user.id === iteam.id ? user : iteam))
+    setUserList(data);
+    localStorage.setItem(userDetails.email, JSON.stringify(data));
   };
 
-  const EditUserdetails = (user) => {
-    setisEdit(true)
-    setuserDetails(user)
-    console.log("user", user)
-    // setUserList(userList.map((iteam) => (user.id === iteam.id ? user : iteam)));
-  };
-
+  //Remove user....
   const RemoveUser = (id) => {
-    let remUser = userList.filter((user) => user.id !== id)
-    setUserList(remUser);
-    localStorage.setItem("userList", JSON.stringify(remUser));
+    let data = userList.filter((user) => user.id !== id)
+    setUserList(data);
+    localStorage.setItem(userDetails.email, JSON.stringify(data));
   };
-
 
   return (
-    <div className="App">{
-      isEdit ?
-      <EditForm type='Update' currentUser={userDetails} EditUser={EditUser}/>
-      :
-      <AddForm addUser={Adduser} type='Login' />
-      }
-      <Curd 
-       users={userList}
-       deleteUser={RemoveUser}
-       editUser={EditUserdetails}
+    <div className="App">
+      <Header Adduser={Adduser} Delete={Delete} />
+      <DataTable
+        userList={userList}
+        RemoveUser={RemoveUser}
+        EditUser={EditUser}
       />
     </div>
   );
 }
 
+export default App;
